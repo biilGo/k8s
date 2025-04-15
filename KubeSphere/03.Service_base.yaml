@@ -1,0 +1,17 @@
+﻿kind: Service
+apiVersion: v1
+metadata:
+  name: app-base
+  namespace: bchd
+  labels:
+    app: base
+spec:
+  ports:
+    - name: tcp-11020
+      protocol: TCP
+      port: 11020
+      targetPort: 11020
+  selector:
+    app: base
+  sessionAffinity: None
+  type: ClusterIP

@@ -1,0 +1,17 @@
+﻿kind: Service
+apiVersion: v1
+metadata:
+  name: app-gateway
+  namespace: bchd
+  labels:
+    app: gateway
+spec:
+  ports:
+    - name: tcp-11010
+      protocol: TCP
+      port: 11010
+      targetPort: 11010
+  selector:
+    app: gateway
+  sessionAffinity: None
+  type: ClusterIP

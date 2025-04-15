@@ -1,0 +1,39 @@
+# 原 Deployment 保持不变（已声明容器端口）
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: bchd
+  labels:
+    app: nginx
+    workload.user.cattle.io/workloadselector: apps.deployment-pub-alone-app-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      workload.user.cattle.io/workloadselector: apps.deployment-pub-alone-app-nginx
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: nginx
+        workload.user.cattle.io/workloadselector: apps.deployment-pub-alone-app-nginx
+    spec:
+      containers:
+        - name: nginx
+          image: 192.168.2.7:80/zrq/nginx:RSV
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 18080
+              name: nginx
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+      restartPolicy: Always

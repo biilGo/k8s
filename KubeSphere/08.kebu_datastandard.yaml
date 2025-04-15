@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datastandard
+  namespace: bchd
+  labels:
+    app: datastandard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datastandard
+  template:
+    metadata:
+      labels:
+        app: datastandard
+    spec:
+      containers:
+      - name: datastandard
+        image: 192.168.2.7:80/zrq/datablau-datastandard:RSV
+        ports:
+        - containerPort: 12020
+          protocol: TCP
+        env:
+        - name: NACOS_USERNAME
+          value: nacos
+        - name: NACOS_PASSWD
+          value: DataBlau@2022
+        - name: NACOS_ADDR
+          value: 192.168.7.91:8848
+        - name: NACOS_NS
+          value: datablau
+        imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: datablau

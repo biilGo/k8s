@@ -1,0 +1,37 @@
+# Deployment 保持原有配置不变（已包含容器端口声明）
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ddm-license
+  namespace: bchd
+  labels:
+    app: ddm-license
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ddm-license
+  template:
+    metadata:
+      labels:
+        app: ddm-license
+    spec:
+      containers:
+        - name: ddm-license
+          image: 192.168.2.7:80/zrq/datablau-ddm-license:RSV
+          ports:
+            - name: http
+              containerPort: 18083  # 容器内应用监听的端口
+              protocol: TCP
+          env:
+            - name: NACOS_USERNAME
+              value: "nacos"
+            - name: NACOS_PASSWD
+              value: "DataBlau@2022"
+            - name: NACOS_ADDR
+              value: "192.168.7.91:8848"
+            - name: NACOS_NS
+              value: "datablau"
+          imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+        - name: datablau
